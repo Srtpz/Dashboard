@@ -1,0 +1,482 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+.wrap{padding:1rem 0;font-family:var(--font-sans);}
+.pair-bar{display:flex;gap:8px;margin-bottom:1.25rem;flex-wrap:wrap;align-items:center;}
+.pair-btn{padding:5px 14px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer;font-size:13px;font-weight:500;}
+.pair-btn.active{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info);}
+.section{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:12px;}
+.sec-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.sec-title{font-size:13px;font-weight:500;color:var(--color-text-primary);display:flex;align-items:center;gap:6px;}
+.sec-badge{font-size:11px;padding:3px 10px;border-radius:var(--border-radius-md);}
+.badge-success{background:var(--color-background-success);color:var(--color-text-success);}
+.badge-warn{background:var(--color-background-warning);color:var(--color-text-warning);}
+.badge-gray{background:var(--color-background-secondary);color:var(--color-text-secondary);}
+.badge-danger{background:var(--color-background-danger);color:var(--color-text-danger);}
+
+/* Toggle row */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);}
+.toggle-row:last-of-type{border-bottom:none;}
+.toggle-info{flex:1;}
+.toggle-label{font-size:13px;color:var(--color-text-primary);}
+.toggle-sub{font-size:11px;color:var(--color-text-secondary);margin-top:2px;}
+.toggle-btns{display:flex;gap:6px;margin-left:12px;}
+.tgl{padding:4px 12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:transparent;cursor:pointer;font-size:12px;font-weight:500;color:var(--color-text-secondary);}
+.tgl.bull-active{background:var(--color-background-success);color:var(--color-text-success);border-color:var(--color-border-success);}
+.tgl.bear-active{background:var(--color-background-danger);color:var(--color-text-danger);border-color:var(--color-border-danger);}
+.tgl.neut-active{background:var(--color-background-warning);color:var(--color-text-warning);border-color:var(--color-border-warning);}
+
+/* Cycle cards */
+.cycle-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
+.cycle-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px;cursor:pointer;transition:border-color 0.1s;}
+.cycle-card.selected{border-color:var(--color-border-info);background:var(--color-background-info);}
+.cycle-card.selected .cyc-name{color:var(--color-text-info);}
+.cyc-icon{font-size:18px;margin-bottom:6px;color:var(--color-text-secondary);}
+.cycle-card.selected .cyc-icon{color:var(--color-text-info);}
+.cyc-name{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px;}
+.cyc-sub{font-size:10px;color:var(--color-text-secondary);line-height:1.4;}
+
+/* Level inputs */
+.level-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
+.lv-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 10px;}
+.lv-label{font-size:10px;color:var(--color-text-secondary);margin-bottom:4px;}
+.lv-input{width:100%;background:transparent;border:none;border-bottom:0.5px solid var(--color-border-secondary);font-size:13px;font-weight:500;color:var(--color-text-primary);padding:2px 0;outline:none;font-family:var(--font-sans);}
+
+/* Check rows */
+.check-row{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary);cursor:pointer;}
+.check-row:last-child{border-bottom:none;padding-bottom:0;}
+.check-row:first-child{padding-top:0;}
+.chk{width:18px;height:18px;min-width:18px;border-radius:5px;border:1.5px solid var(--color-border-secondary);display:flex;align-items:center;justify-content:center;}
+.chk.on{background:var(--color-background-success);border-color:var(--color-border-success);}
+.chk.on i{font-size:12px;color:var(--color-text-success);}
+.chk-label{font-size:13px;color:var(--color-text-primary);line-height:1.5;}
+.chk-sub{font-size:11px;color:var(--color-text-secondary);margin-top:1px;}
+.chk-row-done .chk-label{color:var(--color-text-tertiary);text-decoration:line-through;}
+
+/* Key level rows */
+.kl-row{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary);}
+.kl-row:last-child{border-bottom:none;}
+.kl-name{font-size:12px;color:var(--color-text-secondary);white-space:nowrap;}
+.kl-input{width:100%;background:transparent;border:none;border-bottom:0.5px solid var(--color-border-secondary);font-size:13px;font-weight:500;color:var(--color-text-primary);padding:2px 0;outline:none;font-family:var(--font-sans);}
+.kl-status{display:flex;gap:4px;}
+.ks{padding:3px 8px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);font-size:11px;cursor:pointer;background:transparent;color:var(--color-text-secondary);}
+.ks.approach-active{background:var(--color-background-warning);color:var(--color-text-warning);border-color:var(--color-border-warning);}
+.ks.break-active{background:var(--color-background-success);color:var(--color-text-success);border-color:var(--color-border-success);}
+
+/* MM */
+.mm-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.mm-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px;}
+.mm-label{font-size:11px;color:var(--color-text-secondary);margin-bottom:6px;}
+.unit-btns{display:flex;gap:6px;}
+.unit-btn{flex:1;padding:5px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:transparent;cursor:pointer;font-size:12px;font-weight:500;color:var(--color-text-secondary);}
+.unit-btn.active{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info);}
+.risk-bar{display:flex;gap:6px;}
+.risk-btn{flex:1;padding:5px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:transparent;cursor:pointer;font-size:12px;font-weight:500;color:var(--color-text-secondary);}
+.risk-btn.ok{background:var(--color-background-success);color:var(--color-text-success);border-color:var(--color-border-success);}
+.risk-btn.high{background:var(--color-background-danger);color:var(--color-text-danger);border-color:var(--color-border-danger);}
+
+/* Score + verdict */
+.score-row{display:flex;gap:8px;margin-top:12px;}
+.sc{flex:1;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 10px;text-align:center;}
+.sc-num{font-size:20px;font-weight:500;}
+.sc-lbl{font-size:10px;color:var(--color-text-secondary);margin-top:2px;}
+.verdict{margin-top:10px;padding:10px 14px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px;}
+.verdict.go{background:var(--color-background-success);color:var(--color-text-success);border-color:var(--color-border-success);}
+.verdict.skip{background:var(--color-background-danger);color:var(--color-text-danger);border-color:var(--color-border-danger);}
+.verdict.wait{background:var(--color-background-warning);color:var(--color-text-warning);border-color:var(--color-border-warning);}
+.divider{font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:0.05em;margin:14px 0 8px;}
+</style>
+
+<div class="wrap">
+<h2 class="sr-only">Swing trade pre-trade checklist with primary trend, cycle identification, key levels, and money management</h2>
+
+<div class="pair-bar">
+  <button class="pair-btn active" onclick="setPair('XAUUSD')">XAUUSD</button>
+  <button class="pair-btn" onclick="setPair('S50')">S50</button>
+  <button class="pair-btn" onclick="setPair('BTC')">BTC</button>
+  <button style="font-size:11px;padding:4px 10px;color:var(--color-text-secondary);margin-left:auto;" onclick="resetAll()"><i class="ti ti-refresh" aria-hidden="true"></i> Reset</button>
+</div>
+
+<!-- SECTION 1 -->
+<div class="section">
+  <div class="sec-header">
+    <span class="sec-title"><i class="ti ti-antenna" aria-hidden="true"></i> 1 — Primary trend</span>
+    <span class="sec-badge badge-gray" id="trendBadge">—</span>
+  </div>
+
+  <div class="toggle-row">
+    <div class="toggle-info">
+      <div class="toggle-label">EMA 50 — Weekly</div>
+      <div class="toggle-sub">Price อยู่เหนือ / ใต้ EMA 50 บน Weekly</div>
+    </div>
+    <div class="toggle-btns">
+      <button class="tgl" id="ema50bull" onclick="setToggle('ema50','bull')"><i class="ti ti-trending-up" aria-hidden="true"></i> Above</button>
+      <button class="tgl" id="ema50bear" onclick="setToggle('ema50','bear')"><i class="ti ti-trending-down" aria-hidden="true"></i> Below</button>
+    </div>
+  </div>
+
+  <div class="toggle-row">
+    <div class="toggle-info">
+      <div class="toggle-label">Weekly Price + Volume</div>
+      <div class="toggle-sub">Volume ยืนยัน direction? (expanding on trend candles)</div>
+    </div>
+    <div class="toggle-btns">
+      <button class="tgl" id="volbull" onclick="setToggle('vol','bull')"><i class="ti ti-check" aria-hidden="true"></i> Confirm</button>
+      <button class="tgl" id="volneut" onclick="setToggle('vol','neut')"><i class="ti ti-minus" aria-hidden="true"></i> Neutral</button>
+      <button class="tgl" id="volbear" onclick="setToggle('vol','bear')"><i class="ti ti-x" aria-hidden="true"></i> Diverge</button>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 2 -->
+<div class="section">
+  <div class="sec-header">
+    <span class="sec-title"><i class="ti ti-wave-sine" aria-hidden="true"></i> 2 — Cycle identification</span>
+    <span class="sec-badge badge-gray" id="cycleBadge">ยังไม่เลือก</span>
+  </div>
+
+  <div class="cycle-grid">
+    <div class="cycle-card" id="cyc_fb" onclick="setCycle('fb')">
+      <div class="cyc-icon"><i class="ti ti-box" aria-hidden="true"></i></div>
+      <div class="cyc-name">False Break</div>
+      <div class="cyc-sub">หลังกรอบสะสม (accumulation range)</div>
+    </div>
+    <div class="cycle-card" id="cyc_choch" onclick="setCycle('choch')">
+      <div class="cyc-icon"><i class="ti ti-arrows-exchange" aria-hidden="true"></i></div>
+      <div class="cyc-name">CHoCH</div>
+      <div class="cyc-sub">Change of Character บน 4H</div>
+    </div>
+    <div class="cycle-card" id="cyc_ss" onclick="setCycle('ss')">
+      <div class="cyc-icon"><i class="ti ti-check-circle" aria-hidden="true"></i></div>
+      <div class="cyc-name">Structure Shift</div>
+      <div class="cyc-sub">Confirmed — ใส่ Level ด้านล่าง</div>
+    </div>
+  </div>
+
+  <div id="ssLevels" style="display:none;">
+    <div style="font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:6px;">Structure Shift — Key Levels</div>
+    <div class="level-grid">
+      <div class="lv-card"><div class="lv-label">Swing High (resistance)</div><input class="lv-input" type="text" placeholder="e.g. 2,385" id="lvHigh"></div>
+      <div class="lv-card"><div class="lv-label">Swing Low (support)</div><input class="lv-input" type="text" placeholder="e.g. 2,310" id="lvLow"></div>
+      <div class="lv-card"><div class="lv-label">Order Block zone</div><input class="lv-input" type="text" placeholder="e.g. 2,330 – 2,345" id="lvOB"></div>
+      <div class="lv-card"><div class="lv-label">Break of structure price</div><input class="lv-input" type="text" placeholder="e.g. 2,352" id="lvBOS"></div>
+    </div>
+  </div>
+
+  <div id="cycleChecks" style="margin-top:12px;"></div>
+</div>
+
+<!-- SECTION 3 -->
+<div class="section">
+  <div class="sec-header">
+    <span class="sec-title"><i class="ti ti-map-pin" aria-hidden="true"></i> 3 — Key levels</span>
+    <span class="sec-badge badge-gray" id="klBadge">—</span>
+  </div>
+
+  <div id="klRows">
+    <div class="kl-row">
+      <span class="kl-name">Support</span>
+      <input class="kl-input" type="text" placeholder="price" id="klS">
+      <div class="kl-status">
+        <button class="ks" id="klS_ap" onclick="setKL('S','approach')">Approach</button>
+        <button class="ks" id="klS_br" onclick="setKL('S','break')">Break</button>
+      </div>
+    </div>
+    <div class="kl-row">
+      <span class="kl-name">Resistance</span>
+      <input class="kl-input" type="text" placeholder="price" id="klR">
+      <div class="kl-status">
+        <button class="ks" id="klR_ap" onclick="setKL('R','approach')">Approach</button>
+        <button class="ks" id="klR_br" onclick="setKL('R','break')">Break</button>
+      </div>
+    </div>
+    <div class="kl-row">
+      <span class="kl-name">OB / Zone</span>
+      <input class="kl-input" type="text" placeholder="price range" id="klOB">
+      <div class="kl-status">
+        <button class="ks" id="klOB_ap" onclick="setKL('OB','approach')">Approach</button>
+        <button class="ks" id="klOB_br" onclick="setKL('OB','break')">Break</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION MM -->
+<div class="section">
+  <div class="sec-header">
+    <span class="sec-title"><i class="ti ti-shield" aria-hidden="true"></i> MM — Money management</span>
+    <span class="sec-badge badge-gray" id="mmBadge">—</span>
+  </div>
+
+  <div class="mm-row">
+    <div class="mm-card">
+      <div class="mm-label">Units สำหรับ setup นี้ (max 2)</div>
+      <div class="unit-btns">
+        <button class="unit-btn" id="u1" onclick="setUnit(1)">1 unit</button>
+        <button class="unit-btn" id="u2" onclick="setUnit(2)">2 units</button>
+      </div>
+    </div>
+    <div class="mm-card">
+      <div class="mm-label">Risk level</div>
+      <div class="risk-bar">
+        <button class="risk-btn" id="rOK" onclick="setRisk('ok')"><i class="ti ti-check" aria-hidden="true"></i> Proper</button>
+        <button class="risk-btn" id="rHigh" onclick="setRisk('high')"><i class="ti ti-alert-triangle" aria-hidden="true"></i> Too high</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="mmChecks">
+    <div class="check-row" onclick="toggleChk('mm1')" role="checkbox" tabindex="0">
+      <div class="chk" id="chmm1"></div>
+      <div><div class="chk-label">Setup context เดียวกัน ไม่เกิน 2 units</div><div class="chk-sub">ห้าม scale เกินกรอบ MM ของ portfolio</div></div>
+    </div>
+    <div class="check-row" onclick="toggleChk('mm2')" role="checkbox" tabindex="0">
+      <div class="chk" id="chmm2"></div>
+      <div><div class="chk-label">Risk ต่อ trade ≤ 2% ของ port</div><div class="chk-sub">คำนวณจาก Entry – SL × Lots แล้ว</div></div>
+    </div>
+    <div class="check-row" onclick="toggleChk('mm3')" role="checkbox" tabindex="0">
+      <div class="chk" id="chmm3"></div>
+      <div><div class="chk-label">ไม่ได้ revenge trade / FOMO</div><div class="chk-sub">เข้าด้วย logic ไม่ใช่อารมณ์</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SCORE -->
+<div class="score-row">
+  <div class="sc"><div class="sc-num" id="scPass" style="color:var(--color-text-success);">0</div><div class="sc-lbl">Pass</div></div>
+  <div class="sc"><div class="sc-num" id="scTotal" style="color:var(--color-text-secondary);">—</div><div class="sc-lbl">Total</div></div>
+  <div class="sc"><div class="sc-num" id="scPct" style="color:var(--color-text-primary);">—</div><div class="sc-lbl">Score</div></div>
+</div>
+
+<div class="verdict wait" id="verdict">
+  <i class="ti ti-clock" aria-hidden="true" style="font-size:16px;"></i>
+  <span id="verdictText">กรอก checklist เพื่อดู verdict</span>
+</div>
+
+<div style="text-align:right;margin-top:10px;">
+  <button onclick="sendToChat()" style="font-size:12px;padding:5px 14px;">ถาม Claude วิเคราะห์ ↗</button>
+</div>
+</div>
+
+<script>
+let pair = 'XAUUSD';
+let toggles = {};
+let cycle = null;
+let klState = {};
+let units = null;
+let riskLevel = null;
+let chks = {};
+
+const CYCLE_CHECKS = {
+  fb: [
+    {id:'cy1', label:'กรอบสะสม (range) ชัดเจนบน 4H/Daily', sub:'High-Low range tight อย่างน้อย 5-10 แท่ง'},
+    {id:'cy2', label:'False break เกิดขึ้นแล้ว (ยิงออกนอก range แล้วกลับ)', sub:'Wick / close กลับเข้า range'},
+    {id:'cy3', label:'Volume spike ตอน false break', sub:'Volume สูงผิดปกติ = trap signal'},
+  ],
+  choch: [
+    {id:'cy1', label:'CHoCH เกิดบน 4H ชัดเจน', sub:'Break opposite swing ก่อนหน้า'},
+    {id:'cy2', label:'RSI Divergence ยืนยัน', sub:'Regular divergence ก่อน CHoCH'},
+    {id:'cy3', label:'Candle ปิดแข็งแกร่งทิศทางใหม่', sub:'Strong body close ไม่ใช่ doji'},
+  ],
+  ss: [
+    {id:'cy1', label:'Structure Shift confirmed — BOS เกิดแล้ว', sub:'Break of Structure ชัดเจน ปิดเหนือ/ใต้ swing point'},
+    {id:'cy2', label:'Retest ของ BOS level เกิดขึ้น', sub:'Price กลับมา test แนวที่ break แล้วกระดอน'},
+    {id:'cy3', label:'Order Block ใน range ที่ระบุยังไม่ถูก mitigate', sub:'OB zone ยังสมบูรณ์'},
+  ]
+};
+
+function setPair(p){
+  pair=p;
+  document.querySelectorAll('.pair-btn').forEach(b=>b.classList.toggle('active',b.textContent===p));
+  renderAll();
+}
+
+function setToggle(key,val){
+  toggles[pair+'_'+key] = val;
+  renderAll();
+}
+
+function setCycle(c){
+  cycle = (cycle===c) ? null : c;
+  renderAll();
+}
+
+function setKL(k,v){
+  const cur = klState[pair+'_'+k];
+  klState[pair+'_'+k] = (cur===v) ? null : v;
+  renderAll();
+}
+
+function setUnit(n){
+  units = (units===n) ? null : n;
+  renderAll();
+}
+
+function setRisk(r){
+  riskLevel = (riskLevel===r) ? null : r;
+  renderAll();
+}
+
+function toggleChk(id){
+  const k = pair+'_'+id;
+  chks[k] = !chks[k];
+  renderAll();
+}
+
+function resetAll(){
+  toggles={};cycle=null;klState={};units=null;riskLevel=null;
+  const ckeys=Object.keys(chks).filter(k=>k.startsWith(pair+'_'));
+  ckeys.forEach(k=>delete chks[k]);
+  ['lvHigh','lvLow','lvOB','lvBOS','klS','klR','klOB'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  renderAll();
+}
+
+function renderAll(){
+  renderTrend();
+  renderCycle();
+  renderKL();
+  renderMM();
+  updateScore();
+}
+
+function renderTrend(){
+  const ema = toggles[pair+'_ema50'];
+  const vol = toggles[pair+'_vol'];
+  ['ema50bull','ema50bear'].forEach(id=>{
+    const el=document.getElementById(id);
+    el.className='tgl';
+    if(id==='ema50bull'&&ema==='bull') el.className='tgl bull-active';
+    if(id==='ema50bear'&&ema==='bear') el.className='tgl bear-active';
+  });
+  ['volbull','volneut','volbear'].forEach(id=>{
+    const el=document.getElementById(id);
+    el.className='tgl';
+    if(id==='volbull'&&vol==='bull') el.className='tgl bull-active';
+    if(id==='volneut'&&vol==='neut') el.className='tgl neut-active';
+    if(id==='volbear'&&vol==='bear') el.className='tgl bear-active';
+  });
+  const badge=document.getElementById('trendBadge');
+  if(ema==='bull'&&vol==='bull'){badge.textContent='Bullish';badge.className='sec-badge badge-success';}
+  else if(ema==='bear'&&vol==='bear'){badge.textContent='Bearish';badge.className='sec-badge badge-danger';}
+  else if(ema||vol){badge.textContent='Mixed';badge.className='sec-badge badge-warn';}
+  else{badge.textContent='—';badge.className='sec-badge badge-gray';}
+}
+
+function renderCycle(){
+  ['fb','choch','ss'].forEach(c=>{
+    document.getElementById('cyc_'+c).className='cycle-card'+(cycle===c?' selected':'');
+  });
+  const ssLv=document.getElementById('ssLevels');
+  ssLv.style.display = cycle==='ss'?'block':'none';
+
+  const badge=document.getElementById('cycleBadge');
+  const names={fb:'False Break',choch:'CHoCH',ss:'Structure Shift'};
+  if(cycle){badge.textContent=names[cycle];badge.className='sec-badge badge-success';}
+  else{badge.textContent='ยังไม่เลือก';badge.className='sec-badge badge-gray';}
+
+  const d=document.getElementById('cycleChecks');
+  if(!cycle){d.innerHTML='';return;}
+  const items=CYCLE_CHECKS[cycle];
+  d.innerHTML=items.map(item=>{
+    const k=pair+'_'+item.id;
+    const on=!!chks[k];
+    return `<div class="check-row ${on?'chk-row-done':''}" onclick="toggleChk('${item.id}')" role="checkbox" aria-checked="${on}" tabindex="0">
+      <div class="chk ${on?'on':''}">${on?'<i class="ti ti-check"></i>':''}</div>
+      <div><div class="chk-label">${item.label}</div><div class="chk-sub">${item.sub}</div></div>
+    </div>`;
+  }).join('');
+}
+
+function renderKL(){
+  const badge=document.getElementById('klBadge');
+  const keys=['S','R','OB'];
+  let hasAny=false;
+  keys.forEach(k=>{
+    const st=klState[pair+'_'+k];
+    ['ap','br'].forEach(s=>{
+      const el=document.getElementById('kl'+k+'_'+s);
+      if(!el)return;
+      el.className='ks';
+      if(s==='ap'&&st==='approach'){el.className='ks approach-active';hasAny=true;}
+      if(s==='br'&&st==='break'){el.className='ks break-active';hasAny=true;}
+    });
+  });
+  if(hasAny){badge.textContent='มี interaction';badge.className='sec-badge badge-success';}
+  else{badge.textContent='—';badge.className='sec-badge badge-gray';}
+}
+
+function renderMM(){
+  [1,2].forEach(n=>{
+    const el=document.getElementById('u'+n);
+    el.className='unit-btn'+(units===n?' active':'');
+  });
+  const rOK=document.getElementById('rOK');
+  const rHigh=document.getElementById('rHigh');
+  rOK.className='risk-btn'+(riskLevel==='ok'?' ok':'');
+  rHigh.className='risk-btn'+(riskLevel==='high'?' high':'');
+
+  ['mm1','mm2','mm3'].forEach(id=>{
+    const k=pair+'_'+id;
+    const on=!!chks[k];
+    const el=document.getElementById('ch'+id);
+    if(el){el.className='chk'+(on?' on':''); el.innerHTML=on?'<i class="ti ti-check"></i>':'';}
+    const row=el?el.closest('.check-row'):null;
+    if(row) row.className='check-row'+(on?' chk-row-done':'');
+  });
+
+  const badge=document.getElementById('mmBadge');
+  const mmPass=['mm1','mm2','mm3'].filter(id=>chks[pair+'_'+id]).length;
+  if(units&&riskLevel==='ok'&&mmPass===3){badge.textContent='Ready';badge.className='sec-badge badge-success';}
+  else if(riskLevel==='high'){badge.textContent='Risk too high';badge.className='sec-badge badge-danger';}
+  else if(units||mmPass>0){badge.textContent=mmPass+' / 3';badge.className='sec-badge badge-warn';}
+  else{badge.textContent='—';badge.className='sec-badge badge-gray';}
+}
+
+function updateScore(){
+  const ema=toggles[pair+'_ema50'];
+  const vol=toggles[pair+'_vol'];
+  let pass=0,total=0;
+  if(ema){pass++;} total++;
+  if(vol&&vol!=='bear'){pass++;} total++;
+  if(cycle){pass++;} total++;
+  const cyItems=cycle?CYCLE_CHECKS[cycle]:[];
+  cyItems.forEach(i=>{total++;if(chks[pair+'_'+i.id])pass++;});
+  const klKeys=['S','R','OB'];
+  klKeys.forEach(k=>{total++;if(klState[pair+'_'+k])pass++;});
+  if(units){pass++;} total++;
+  if(riskLevel==='ok'){pass++;} total++;
+  ['mm1','mm2','mm3'].forEach(id=>{total++;if(chks[pair+'_'+id])pass++;});
+
+  document.getElementById('scPass').textContent=pass;
+  document.getElementById('scTotal').textContent=total;
+  const pct=Math.round(pass/total*100);
+  document.getElementById('scPct').textContent=pct+'%';
+
+  const v=document.getElementById('verdict');
+  const vt=document.getElementById('verdictText');
+  const vi=v.querySelector('i');
+
+  if(pass===0){v.className='verdict wait';vi.className='ti ti-clock';vt.textContent='กรอก checklist เพื่อดู verdict';}
+  else if(riskLevel==='high'){v.className='verdict skip';vi.className='ti ti-ban';vt.textContent='Risk too high — ปรับ size ก่อน entry';}
+  else if(pct===100){v.className='verdict go';vi.className='ti ti-circle-check';vt.textContent=`${pair} — Pass ทุก condition · Ready to trade`;}
+  else if(pct>=75){v.className='verdict wait';vi.className='ti ti-alert-triangle';vt.textContent=`${pair} — ${pct}% — ใกล้ครบ ตรวจข้อที่ขาดก่อน`;}
+  else{v.className='verdict skip';vi.className='ti ti-ban';vt.textContent=`${pair} — ${pct}% — Condition ไม่พอ · Skip หรือรอ setup ใหม่`;}
+}
+
+function sendToChat(){
+  const ema=toggles[pair+'_ema50']||'—';
+  const vol=toggles[pair+'_vol']||'—';
+  const cyNames={fb:'False Break',choch:'CHoCH',ss:'Structure Shift'};
+  let msg=`Pre-Trade Checklist — ${pair}\n`;
+  msg+=`Primary Trend: EMA50=${ema}, Volume=${vol}\n`;
+  msg+=`Cycle: ${cycle?cyNames[cycle]:'ยังไม่เลือก'}\n`;
+  if(cycle){const items=CYCLE_CHECKS[cycle];items.forEach(i=>{msg+=`  ${chks[pair+'_'+i.id]?'✓':'✗'} ${i.label}\n`;});}
+  ['S','R','OB'].forEach(k=>{const st=klState[pair+'_'+k]||'—';msg+=`Key Level ${k}: ${st}\n`;});
+  msg+=`Units: ${units||'—'}, Risk: ${riskLevel||'—'}\n`;
+  ['mm1','mm2','mm3'].forEach(id=>{msg+=`${chks[pair+'_'+id]?'✓':'✗'} MM check ${id}\n`;});
+  msg+='\nช่วยวิเคราะห์ว่า setup นี้ควร Enter หรือ Skip?';
+  sendPrompt(msg);
+}
+
+renderAll();
+</script>
